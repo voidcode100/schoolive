@@ -17,6 +17,10 @@
     </header>
     <main>
         <h2>帖子列表</h2>
+        <!-- 发布帖子按钮 -->
+        <div class="post-actions">
+            <button onclick="location.href='createPost.jsp'" class="create-post-button">发布帖子</button>
+        </div>
         <div id="postList" class="post-list">
             <!-- 动态加载帖子 -->
         </div>

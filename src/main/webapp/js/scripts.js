@@ -191,10 +191,39 @@ function loadPosts() {
     });
 }
 
+// 加载评论
+function loadComments(postId) {
+  const commentList = document.getElementById("commentList");
+
+  fetch(`/comments?postId=${postId}`)
+    .then((response) => response.json())
+    .then((comments) => {
+      comments.forEach((comment) => {
+        const commentElement = document.createElement("li");
+        commentElement.className = "comment";
+        commentElement.innerHTML = `
+          <p>${comment.content}</p>
+          <p><small>评论者：${comment.author} | 评论时间：${comment.createdAt}</small></p>
+        `;
+        commentList.appendChild(commentElement);
+      });
+    })
+    .catch((error) => {
+      console.error("加载评论失败：", error);
+      alert("无法加载评论，请稍后重试！");
+    });
+}
+
 // 页面加载时初始化
 document.addEventListener("DOMContentLoaded", () => {
   const postList = document.getElementById("postList");
   if (postList) {
     loadPosts();
+  }
+
+  const commentList = document.getElementById("commentList");
+  if (commentList) {
+    const postId = commentList.dataset.postId;
+    loadComments(postId);
   }
 });

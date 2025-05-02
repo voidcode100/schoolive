@@ -1,10 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page import="com.schoolive.beans.UserBean" %>
 <%
-    if (request.getSession(false) == null || request.getSession(false).getAttribute("user") == null) {
+    if (session == null || session.getAttribute("user") == null) {
         response.sendRedirect("login.jsp");
         return;
     }
+    UserBean user = (UserBean) session.getAttribute("user");
 %>
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -16,7 +18,7 @@
 </head>
 <body>
     <header>
-        <h1>Schoolive</h1>
+        <h1>欢迎，<%= user.getUsername() %>！</h1>
         <nav>
             <a href="profile.jsp">个人主页</a>
             <a href="logout">退出登录</a>

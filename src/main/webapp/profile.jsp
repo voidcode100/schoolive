@@ -1,10 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page import="com.schoolive.beans.UserBean" %>
 <%
-    if (request.getSession(false) == null || request.getSession(false).getAttribute("user") == null) {
+    if (session == null || session.getAttribute("user") == null) {
         response.sendRedirect("login.jsp");
         return;
     }
+    UserBean user = (UserBean) session.getAttribute("user");
 %>
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -16,19 +18,16 @@
 </head>
 <body>
     <header>
-        <h1>Schoolive</h1>
+        <h1>个人主页</h1>
         <nav>
             <a href="home.jsp">主页</a>
             <a href="logout">退出登录</a>
         </nav>
     </header>
     <main>
-        <section>
-            <h2>个人信息</h2>
-            <div class="profile-info">
-                <!-- 动态加载用户信息 -->
-            </div>
-        </section>
+        <h2>欢迎，<%= user.getUsername() %>！</h2>
+        <p>邮箱：<%= user.getEmail() %></p>
+        <p>简介：<%= user.getBio() %></p>
         <section>
             <h2>我的帖子</h2>
             <div id="userPostList" class="post-list">

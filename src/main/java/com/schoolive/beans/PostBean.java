@@ -7,6 +7,7 @@ public class PostBean {
     private String content;      // 帖子内容
     private String createdAt;    // 创建时间
     private String updatedAt;    // 更新时间
+    private String author;       // 发布者用户名
 
     // Getter 和 Setter 方法
     public int getPostId() {
@@ -55,5 +56,13 @@ public class PostBean {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

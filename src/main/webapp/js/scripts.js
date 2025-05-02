@@ -20,7 +20,7 @@ function toggleLike(button) {
   const isLiked = button.classList.contains("liked");
   const postId = button.dataset.postId;
 
-  fetch(`/like?postId=${postId}`, {
+  fetch(`/schoolive/like?postId=${postId}`, {
     method: isLiked ? "DELETE" : "POST",
   })
     .then((response) => response.json())
@@ -54,7 +54,7 @@ function toggleFavorite(button) {
   const isFavorited = button.classList.contains("favorited");
   const postId = button.dataset.postId;
 
-  fetch(`/favorite?postId=${postId}`, {
+  fetch(`/schoolive/favorite?postId=${postId}`, {
     method: isFavorited ? "DELETE" : "POST",
   })
     .then((response) => response.json())
@@ -91,7 +91,7 @@ function submitComment(event) {
   const postId = commentInput.dataset.postId;
 
   if (commentInput.value.trim() !== "") {
-    fetch(`/comment?postId=${postId}`, {
+    fetch(`/schoolive/comment?postId=${postId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -129,7 +129,7 @@ function toggleFollow(button) {
   const isFollowing = button.classList.contains("following");
   const followeeId = button.dataset.followeeId;
 
-  fetch(`/follow?followeeId=${followeeId}`, {
+  fetch(`/schoolive/follow?followeeId=${followeeId}`, {
     method: isFollowing ? "DELETE" : "POST",
   })
     .then((response) => response.json())
@@ -162,7 +162,7 @@ followButtons.forEach((button) => {
 function loadPosts() {
   const postList = document.getElementById("postList");
 
-  fetch("/posts")
+  fetch("/schoolive/posts")
     .then((response) => response.json())
     .then((posts) => {
       posts.forEach((post) => {
@@ -171,7 +171,7 @@ function loadPosts() {
         postElement.innerHTML = `
           <h3><a href="post.jsp?postId=${post.postId}">${post.title}</a></h3>
           <p>${post.content.substring(0, 100)}...</p>
-          <p><small>作者：${post.author} | 发布时间：${post.createdAt}</small></p>
+          <p><small>发布者：${post.author} | 发布时间：${post.createdAt}</small></p>
           <button class="like-button" data-post-id="${post.postId}">点赞 (${post.likes})</button>
           <button class="favorite-button" data-post-id="${post.postId}">收藏</button>
         `;
@@ -195,7 +195,7 @@ function loadPosts() {
 function loadComments(postId) {
   const commentList = document.getElementById("commentList");
 
-  fetch(`/comments?postId=${postId}`)
+  fetch(`/schoolive/comments?postId=${postId}`)
     .then((response) => response.json())
     .then((comments) => {
       comments.forEach((comment) => {
@@ -216,7 +216,7 @@ function loadComments(postId) {
 
 // 加载帖子详情
 function loadPostDetails(postId) {
-  fetch(`/postDetail?postId=${postId}`)
+  fetch(`/schoolive/postDetail?postId=${postId}`)
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -239,7 +239,7 @@ function loadPostDetails(postId) {
 
 // 加载用户信息
 function loadUserProfile() {
-  fetch("/profile")
+  fetch("/schoolive/profile")
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -264,6 +264,30 @@ function loadUserProfile() {
     });
 }
 
+// 动态加载用户个人帖子
+function loadUserPosts() {
+  const userPostList = document.getElementById("userPostList");
+
+  fetch("/schoolive/userPosts")
+    .then((response) => response.json())
+    .then((posts) => {
+      posts.forEach((post) => {
+        const postElement = document.createElement("div");
+        postElement.className = "post";
+        postElement.innerHTML = `
+          <h3><a href="post.jsp?postId=${post.postId}">${post.title}</a></h3>
+          <p>${post.content.substring(0, 100)}...</p>
+          <p><small>发布时间：${post.createdAt}</small></p>
+        `;
+        userPostList.appendChild(postElement);
+      });
+    })
+    .catch((error) => {
+      console.error("加载用户帖子失败：", error);
+      alert("无法加载用户帖子，请稍后重试！");
+    });
+}
+
 // 页面加载时初始化
 document.addEventListener("DOMContentLoaded", () => {
   const postList = document.getElementById("postList");
@@ -281,5 +305,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // 仅在包含 .profile-info 的页面加载用户信息
   if (document.querySelector(".profile-info")) {
     loadUserProfile();
+  }
+
+  const userPostList = document.getElementById("userPostList");
+  if (userPostList) {
+    loadUserPosts();
   }
 });

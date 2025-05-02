@@ -7,11 +7,10 @@
 
 /* Body Styling */
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f9;
-  color: #333;
 }
 
 /* Header Styling */
@@ -44,16 +43,22 @@ header nav a:hover {
 
 /* Container Styling */
 .container {
-  max-width: 800px;
-  margin: 50px auto;
+  max-width: 400px;
+  margin: 100px auto;
   padding: 20px;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 /* Heading Styling */
-h1, h2, h3 {
+h1 {
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+h2, h3 {
   color: #007bff;
 }
 
@@ -64,7 +69,16 @@ form label {
   font-weight: bold;
 }
 
-form input, form textarea, form button {
+form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+form textarea {
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
@@ -74,9 +88,13 @@ form input, form textarea, form button {
 }
 
 form button {
+  width: 100%;
+  padding: 10px;
   background: #007bff;
   color: #fff;
   border: none;
+  border-radius: 4px;
+  font-size: 16px;
   cursor: pointer;
   transition: background 0.3s;
 }
@@ -114,4 +132,18 @@ footer {
   background: #007bff;
   color: #fff;
   margin-top: 50px;
+}
+
+/* Paragraph Styling */
+p {
+  margin-top: 15px;
+}
+
+p a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+p a:hover {
+  text-decoration: underline;
 }

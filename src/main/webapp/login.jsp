@@ -10,6 +10,17 @@
 <body>
     <div class="container">
         <h1>登录</h1>
+        <!-- 显示错误信息 -->
+        <%
+            String error = (String) request.getAttribute("error");
+            if (error != null) {
+        %>
+        <div class="error-message">
+            <%= error %>
+        </div>
+        <%
+            }
+        %>
         <form id="loginForm" action="login" method="post">
             <label for="username">用户名：</label>
             <input type="text" id="username" name="username" placeholder="请输入用户名" required>

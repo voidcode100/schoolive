@@ -7,6 +7,15 @@
         return;
     }
     UserBean user = (UserBean) session.getAttribute("user");
+    String successMessage = (String) session.getAttribute("successMessage");
+    if (successMessage != null) {
+%>
+    <div class="success-message">
+        <%= successMessage %>
+    </div>
+<%
+        session.removeAttribute("successMessage");
+    }
 %>
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -28,6 +37,24 @@
         <h2>欢迎，<%= user.getUsername() %>！</h2>
         <p>邮箱：<%= user.getEmail() %></p>
         <p>简介：<%= user.getBio() %></p>
+
+        <!-- 修改用户信息表单 -->
+        <section>
+            <h2>修改个人信息</h2>
+            <form id="updateUserForm" action="updateUser" method="post">
+                <label for="username">用户名：</label>
+                <input type="text" id="username" name="username" value="<%= user.getUsername() %>" required>
+
+                <label for="email">邮箱：</label>
+                <input type="email" id="email" name="email" value="<%= user.getEmail() %>" required>
+
+                <label for="bio">简介：</label>
+                <textarea id="bio" name="bio" rows="4"><%= user.getBio() %></textarea>
+
+                <button type="submit">保存修改</button>
+            </form>
+        </section>
+
         <section>
             <h2>我的帖子</h2>
             <div id="userPostList" class="post-list">

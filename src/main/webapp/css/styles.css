@@ -111,6 +111,40 @@ form button:hover {
   background: #0056b3;
 }
 
+/* 修改用户信息表单样式 */
+form#updateUserForm {
+  margin-top: 20px;
+}
+
+form#updateUserForm label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+form#updateUserForm input,
+form#updateUserForm textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form#updateUserForm button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+form#updateUserForm button:hover {
+  background-color: #0056b3;
+}
+
 /* Post and Comment Styling */
 .post, .comment {
   border-bottom: 1px solid #ddd;
@@ -175,4 +209,15 @@ p a {
 
 p a:hover {
   text-decoration: underline;
+}
+
+/* 成功提示信息样式 */
+.success-message {
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  border-radius: 4px;
+  font-size: 16px;
 }

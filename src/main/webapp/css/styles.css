@@ -5,12 +5,20 @@
   box-sizing: border-box;
 }
 
-/* Body Styling */
+/* 设置页面整体布局 */
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* 确保页面高度至少为视口高度 */
+  margin: 0;
   font-family: Arial, sans-serif;
   background-color: #f4f4f9;
-  margin: 0;
   padding: 0;
+}
+
+/* 主内容区域 */
+.wrapper {
+  flex: 1; /* 让主内容区域占据剩余空间 */
 }
 
 /* Header Styling */
@@ -152,7 +160,7 @@ footer {
   padding: 20px;
   background: #007bff;
   color: #fff;
-  margin-top: 50px;
+  margin-top: auto; /* 将页脚推到页面底部 */
 }
 
 /* Paragraph Styling */

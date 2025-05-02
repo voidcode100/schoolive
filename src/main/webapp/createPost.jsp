@@ -1,4 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import="javax.servlet.http.HttpSession" %>
+<%
+    if (request.getSession(false) == null || request.getSession(false).getAttribute("user") == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>

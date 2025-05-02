@@ -18,9 +18,7 @@
     </header>
     <main>
         <article>
-            <h2>帖子标题示例</h2>
-            <p>帖子内容详情...</p>
-            <p><small>作者：用户名 | 发布时间：2025-05-02</small></p>
+            <!-- 动态加载帖子详情 -->
         </article>
         <section>
             <h3>评论</h3>

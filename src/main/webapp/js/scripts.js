@@ -214,6 +214,52 @@ function loadComments(postId) {
     });
 }
 
+// 加载帖子详情
+function loadPostDetails(postId) {
+  fetch(`/postDetail?postId=${postId}`)
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error("无法加载帖子详情");
+      }
+    })
+    .then((post) => {
+      document.querySelector("article").innerHTML = `
+        <h2>${post.title}</h2>
+        <p>${post.content}</p>
+        <p><small>作者：${post.author} | 发布时间：${post.createdAt}</small></p>
+      `;
+    })
+    .catch((error) => {
+      console.error("加载帖子详情失败：", error);
+      alert("无法加载帖子详情，请稍后重试！");
+    });
+}
+
+// 加载用户信息
+function loadUserProfile() {
+  fetch("/profile")
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error("未登录或无法加载用户信息");
+      }
+    })
+    .then((user) => {
+      document.querySelector(".profile-info").innerHTML = `
+        <p><strong>用户名：</strong> ${user.username}</p>
+        <p><strong>邮箱：</strong> ${user.email}</p>
+        <p><strong>简介：</strong> ${user.bio}</p>
+      `;
+    })
+    .catch((error) => {
+      console.error("加载用户信息失败：", error);
+      alert("无法加载用户信息，请稍后重试！");
+    });
+}
+
 // 页面加载时初始化
 document.addEventListener("DOMContentLoaded", () => {
   const postList = document.getElementById("postList");
@@ -224,6 +270,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const commentList = document.getElementById("commentList");
   if (commentList) {
     const postId = commentList.dataset.postId;
+    loadPostDetails(postId);
     loadComments(postId);
   }
+
+  loadUserProfile();
 });

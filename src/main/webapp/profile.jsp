@@ -19,9 +19,7 @@
         <section>
             <h2>个人信息</h2>
             <div class="profile-info">
-                <p><strong>用户名：</strong> 示例用户</p>
-                <p><strong>邮箱：</strong> example@example.com</p>
-                <p><strong>简介：</strong> 这是一个示例简介。</p>
+                <!-- 动态加载用户信息 -->
             </div>
         </section>
         <section>

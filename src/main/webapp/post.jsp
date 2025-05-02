@@ -32,10 +32,10 @@
         <section>
             <h3>评论</h3>
             <form id="commentForm" action="comment" method="post">
-                <textarea id="commentInput" name="content" rows="4" placeholder="发表评论..." required></textarea>
+                <textarea id="commentInput" name="content" rows="4" placeholder="发表评论..." required data-post-id="<%= request.getParameter("postId") %>"></textarea>
                 <button type="submit">提交评论</button>
             </form>
-            <ul id="commentList" class="comments" data-post-id="1">
+            <ul id="commentList" class="comments" data-post-id="<%= request.getParameter("postId") %>">
                 <!-- 动态加载评论 -->
             </ul>
         </section>

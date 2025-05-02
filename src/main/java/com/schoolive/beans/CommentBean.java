@@ -6,6 +6,7 @@ public class CommentBean {
     private int userId;          // 评论者ID
     private String content;      // 评论内容
     private String createdAt;    // 评论时间
+    private String author;       // 评论者用户名
 
     // Getter 和 Setter 方法
     public int getCommentId() {
@@ -46,5 +47,13 @@ public class CommentBean {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

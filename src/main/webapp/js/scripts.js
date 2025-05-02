@@ -85,37 +85,49 @@ favoriteButtons.forEach((button) => {
 
 // 提交评论
 function submitComment(event) {
-  event.preventDefault();
-  const commentInput = document.getElementById("commentInput");
-  const commentList = document.getElementById("commentList");
-  const postId = commentInput.dataset.postId;
+  event.preventDefault(); // 阻止表单默认提交行为
 
-  if (commentInput.value.trim() !== "") {
-    fetch(`/schoolive/comment?postId=${postId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ content: commentInput.value.trim() }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          const newComment = document.createElement("li");
-          newComment.textContent = `${data.author}: ${commentInput.value}`;
-          commentList.appendChild(newComment);
-          commentInput.value = ""; // 清空输入框
-        } else {
-          alert("评论提交失败，请稍后重试！");
-        }
-      })
-      .catch((error) => {
-        console.error("评论提交失败：", error);
-        alert("网络错误，请稍后重试！");
-      });
-  } else {
-    alert("评论内容不能为空！");
+  const commentInput = document.getElementById("commentInput"); // 获取评论输入框
+  const commentList = document.getElementById("commentList"); // 获取评论列表容器
+  const postId = commentInput.dataset.postId; // 从 data-post-id 属性获取帖子 ID
+
+  if (!postId) {
+    alert("无法获取帖子 ID，请刷新页面重试！");
+    return;
   }
+
+  const commentContent = commentInput.value.trim(); // 获取输入框中的评论内容
+  if (commentContent === "") {
+    alert("评论内容不能为空！");
+    return;
+  }
+
+  // 发送评论请求到后端
+  fetch(`/schoolive/comment`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `postId=${postId}&content=${encodeURIComponent(commentContent)}`,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        // 创建新的评论元素并添加到评论列表
+        const newComment = document.createElement("li");
+        newComment.innerHTML = `<p>${data.author}: ${commentContent}</p>`;
+        commentList.appendChild(newComment);
+
+        // 清空输入框
+        commentInput.value = "";
+      } else {
+        alert("评论提交失败，请稍后重试！");
+      }
+    })
+    .catch((error) => {
+      console.error("评论提交失败：", error);
+      alert("网络错误，请稍后重试！");
+    });
 }
 
 // 绑定评论提交事件
@@ -195,15 +207,15 @@ function loadPosts() {
 function loadComments(postId) {
   const commentList = document.getElementById("commentList");
 
-  fetch(`/schoolive/comments?postId=${postId}`)
+  fetch(`/schoolive/comment?postId=${postId}`)
     .then((response) => response.json())
     .then((comments) => {
       comments.forEach((comment) => {
         const commentElement = document.createElement("li");
         commentElement.className = "comment";
         commentElement.innerHTML = `
-          <p>${comment.content}</p>
-          <p><small>评论者：${comment.author} | 评论时间：${comment.createdAt}</small></p>
+          <p>${comment.author}: ${comment.content}</p>
+          <p><small>评论时间：${comment.createdAt}</small></p>
         `;
         commentList.appendChild(commentElement);
       });

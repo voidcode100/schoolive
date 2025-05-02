@@ -256,7 +256,11 @@ function loadUserProfile() {
     })
     .catch((error) => {
       console.error("加载用户信息失败：", error);
-      alert("无法加载用户信息，请稍后重试！");
+      // 在注册和登录页面不显示错误提示
+      const profileInfo = document.querySelector(".profile-info");
+      if (profileInfo) {
+        alert("无法加载用户信息，请稍后重试！");
+      }
     });
 }
 
@@ -274,5 +278,8 @@ document.addEventListener("DOMContentLoaded", () => {
     loadComments(postId);
   }
 
-  loadUserProfile();
+  // 仅在包含 .profile-info 的页面加载用户信息
+  if (document.querySelector(".profile-info")) {
+    loadUserProfile();
+  }
 });

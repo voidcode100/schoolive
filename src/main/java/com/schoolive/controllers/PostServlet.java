@@ -28,7 +28,7 @@ public class PostServlet extends HttpServlet {
         int userId = (currentUser != null) ? currentUser.getUserId() : 0;
 
         // 调用 PostDao 获取所有帖子（包含点赞数和用户点赞状态）
-        List<PostBean> posts = postDao.getAllPostsWithLikes(userId);
+        List<PostBean> posts = postDao.getAllPostsWithLikesAndFavorites(userId);
 
         // 为每个帖子获取发布者信息
         for (PostBean post : posts) {

@@ -187,7 +187,9 @@ function loadPosts() {
           <button class="like-button ${post.isLiked ? 'liked' : ''}" data-post-id="${post.postId}">
             ${post.isLiked ? `已点赞 (${post.likes})` : `点赞 (${post.likes})`}
           </button>
-          <button class="favorite-button" data-post-id="${post.postId}">收藏</button>
+          <button class="favorite-button ${post.isFavorited ? 'favorited' : ''}" data-post-id="${post.postId}">
+            ${post.isFavorited ? "已收藏" : "收藏"}
+          </button>
         `;
         postList.appendChild(postElement);
 
@@ -302,6 +304,40 @@ function loadUserPosts() {
     });
 }
 
+// 切换展开/收起功能
+function toggleSection(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (section.style.display === "none") {
+    section.style.display = "block";
+  } else {
+    section.style.display = "none";
+  }
+}
+
+// 动态加载收藏帖子
+function loadFavoritePosts() {
+  const favoritePostList = document.getElementById("favoritePostList");
+
+  fetch("/schoolive/favoritePosts")
+    .then((response) => response.json())
+    .then((posts) => {
+      posts.forEach((post) => {
+        const postElement = document.createElement("div");
+        postElement.className = "post";
+        postElement.innerHTML = `
+          <h3><a href="post.jsp?postId=${post.postId}">${post.title}</a></h3>
+          <p>${post.content.substring(0, 100)}...</p>
+          <p><small>发布时间：${post.createdAt}</small></p>
+        `;
+        favoritePostList.appendChild(postElement);
+      });
+    })
+    .catch((error) => {
+      console.error("加载收藏帖子失败：", error);
+      alert("无法加载收藏帖子，请稍后重试！");
+    });
+}
+
 // 页面加载时初始化
 document.addEventListener("DOMContentLoaded", () => {
   const postList = document.getElementById("postList");
@@ -324,5 +360,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const userPostList = document.getElementById("userPostList");
   if (userPostList) {
     loadUserPosts();
+  }
+
+  const favoritePostList = document.getElementById("favoritePostList");
+  if (favoritePostList) {
+    loadFavoritePosts();
   }
 });

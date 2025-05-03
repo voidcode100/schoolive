@@ -189,6 +189,21 @@ form#updateUserForm button:hover {
   background-color: #0056b3;
 }
 
+/* 展开/收起按钮样式 */
+.toggle-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 18px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.toggle-button:hover {
+  color: #0056b3;
+}
+
 /* Footer Styling */
 footer {
   text-align: center;

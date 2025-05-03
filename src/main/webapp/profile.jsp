@@ -7,15 +7,6 @@
         return;
     }
     UserBean user = (UserBean) session.getAttribute("user");
-    String successMessage = (String) session.getAttribute("successMessage");
-    if (successMessage != null) {
-%>
-    <div class="success-message">
-        <%= successMessage %>
-    </div>
-<%
-        session.removeAttribute("successMessage");
-    }
 %>
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -55,10 +46,23 @@
             </form>
         </section>
 
+        <!-- 我的帖子 -->
         <section>
-            <h2>我的帖子</h2>
-            <div id="userPostList" class="post-list">
+            <h2>
+                <button class="toggle-button" onclick="toggleSection('userPostList')">我的帖子</button>
+            </h2>
+            <div id="userPostList" class="post-list" style="display: none;">
                 <!-- 动态加载用户帖子 -->
+            </div>
+        </section>
+
+        <!-- 收藏帖子 -->
+        <section>
+            <h2>
+                <button class="toggle-button" onclick="toggleSection('favoritePostList')">收藏帖子</button>
+            </h2>
+            <div id="favoritePostList" class="post-list" style="display: none;">
+                <!-- 动态加载收藏帖子 -->
             </div>
         </section>
     </main>

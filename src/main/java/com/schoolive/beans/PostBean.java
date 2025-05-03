@@ -10,6 +10,7 @@ public class PostBean {
     private String author;       // 发布者用户名
     private int likes;           // 点赞数
     private boolean isLiked;     // 当前用户是否已点赞
+    private boolean isFavorited; // 当前用户是否已收藏
 
     // Getter 和 Setter 方法
     public int getPostId() {
@@ -82,5 +83,13 @@ public class PostBean {
 
     public void setLiked(boolean isLiked) {
         this.isLiked = isLiked;
+    }
+
+    public boolean isFavorited() {
+        return isFavorited;
+    }
+
+    public void setFavorited(boolean isFavorited) {
+        this.isFavorited = isFavorited;
     }
 }

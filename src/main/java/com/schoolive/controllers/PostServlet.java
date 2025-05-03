@@ -92,5 +92,7 @@ public class PostServlet extends HttpServlet {
             jsonResponse.addProperty("message", "帖子删除失败");
         }
         response.getWriter().write(jsonResponse.toString());
+
+        
     }
 }

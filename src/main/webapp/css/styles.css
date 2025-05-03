@@ -168,12 +168,39 @@ form#updateUserForm button:hover {
   border-left: 2px solid #ddd;
 }
 
-/* 发布帖子按钮样式 */
+/* 点赞和收藏按钮容器 */
 .post-actions {
-  margin: 20px 0;
-  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 左对齐 */
+  gap: 15px; /* 按钮之间的间距 */
+  margin: 10px 0; /* 与其他内容的间距 */
 }
 
+/* 点赞和收藏按钮 */
+.like-button, .favorite-button {
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* 图标样式 */
+.like-icon, .favorite-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+}
+
+/* 点赞计数样式 */
+.like-count {
+  font-size: 14px;
+  color: #333;
+}
+
+/* 发布帖子按钮样式 */
 .create-post-button {
   padding: 10px 20px;
   background-color: #007bff;
@@ -183,25 +210,62 @@ form#updateUserForm button:hover {
   font-size: 16px;
   cursor: pointer;
   transition: background 0.3s;
+  margin-left: auto; /* 保持右对齐 */
 }
 
 .create-post-button:hover {
   background-color: #0056b3;
 }
 
-/* 展开/收起按钮样式 */
-.toggle-button {
-  background: none;
-  border: none;
-  color: #007bff;
-  font-size: 18px;
-  cursor: pointer;
-  text-decoration: underline;
-  padding: 0;
+/* 展开/收起按钮容器 */
+.toggle-section {
+  margin: 10px 0;
 }
 
-.toggle-button:hover {
-  color: #0056b3;
+/* 展开/收起按钮 */
+.toggle-button {
+  display: flex;
+  align-items: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 16px;
+  color: #007bff;
+}
+
+/* 展开/收起图标样式 */
+.toggle-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  transition: transform 0.3s ease;
+}
+
+/* 展开内容样式 */
+.section-content {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+/* 删除按钮 */
+.delete-button {
+  display: flex;
+  align-items: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* 删除按钮图标样式 */
+.delete-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
 }
 
 /* Footer Styling */

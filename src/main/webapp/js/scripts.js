@@ -17,6 +17,8 @@ if (loginForm) {
 
 // 点赞功能
 function toggleLike(button) {
+  const icon = button.querySelector(".like-icon");
+  const count = button.querySelector(".like-count");
   const isLiked = button.classList.contains("liked");
   const postId = button.dataset.postId;
 
@@ -28,11 +30,12 @@ function toggleLike(button) {
       if (data.success) {
         if (isLiked) {
           button.classList.remove("liked");
-          button.textContent = `点赞 (${data.likes})`;
+          icon.src = "images/like-48.png"; // 未点赞图片
         } else {
           button.classList.add("liked");
-          button.textContent = `已点赞 (${data.likes})`;
+          icon.src = "images/like-49.png"; // 已点赞图片
         }
+        count.textContent = data.likes; // 更新点赞数
       } else {
         alert("操作失败，请稍后重试！");
       }
@@ -51,6 +54,7 @@ likeButtons.forEach((button) => {
 
 // 收藏功能
 function toggleFavorite(button) {
+  const icon = button.querySelector(".favorite-icon");
   const isFavorited = button.classList.contains("favorited");
   const postId = button.dataset.postId;
 
@@ -62,10 +66,10 @@ function toggleFavorite(button) {
       if (data.success) {
         if (isFavorited) {
           button.classList.remove("favorited");
-          button.textContent = "收藏";
+          icon.src = "images/favorite-41.png"; // 未收藏图片
         } else {
           button.classList.add("favorited");
-          button.textContent = "已收藏";
+          icon.src = "images/favorite-40.png"; // 已收藏图片
         }
       } else {
         alert("操作失败，请稍后重试！");
@@ -136,40 +140,6 @@ if (commentForm) {
   commentForm.addEventListener("submit", submitComment);
 }
 
-// 关注功能
-function toggleFollow(button) {
-  const isFollowing = button.classList.contains("following");
-  const followeeId = button.dataset.followeeId;
-
-  fetch(`/schoolive/follow?followeeId=${followeeId}`, {
-    method: isFollowing ? "DELETE" : "POST",
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-        if (isFollowing) {
-          button.classList.remove("following");
-          button.textContent = "关注";
-        } else {
-          button.classList.add("following");
-          button.textContent = "已关注";
-        }
-      } else {
-        alert("操作失败，请稍后重试！");
-      }
-    })
-    .catch((error) => {
-      console.error("关注请求失败：", error);
-      alert("网络错误，请稍后重试！");
-    });
-}
-
-// 绑定关注按钮事件
-const followButtons = document.querySelectorAll(".follow-button");
-followButtons.forEach((button) => {
-  button.addEventListener("click", () => toggleFollow(button));
-});
-
 // 动态加载帖子列表
 function loadPosts() {
   const postList = document.getElementById("postList");
@@ -185,10 +155,11 @@ function loadPosts() {
           <p>${post.content.substring(0, 100)}...</p>
           <p><small>发布者：${post.author} | 发布时间：${post.createdAt}</small></p>
           <button class="like-button ${post.isLiked ? 'liked' : ''}" data-post-id="${post.postId}">
-            ${post.isLiked ? `已点赞 (${post.likes})` : `点赞 (${post.likes})`}
+            <img class="like-icon" src="images/${post.isLiked ? 'like-49.png' : 'like-48.png'}" />
+            <span class="like-count">${post.likes}</span>
           </button>
           <button class="favorite-button ${post.isFavorited ? 'favorited' : ''}" data-post-id="${post.postId}">
-            ${post.isFavorited ? "已收藏" : "收藏"}
+            <img class="favorite-icon" src="images/${post.isFavorited ? 'favorite-40.png' : 'favorite-41.png'}" />
           </button>
         `;
         postList.appendChild(postElement);
@@ -279,13 +250,18 @@ function loadUserProfile() {
       }
     });
 }
+
 // 切换展开/收起功能
-function toggleSection(sectionId) {
+function toggleSection(sectionId, button) {
   const section = document.getElementById(sectionId);
-  if (section.style.display === "none") {
+  const icon = button.querySelector(".toggle-icon");
+
+  if (section.style.display === "none" || section.style.display === "") {
     section.style.display = "block";
+    icon.src = "images/fold-48.png"; // 展开图标
   } else {
     section.style.display = "none";
+    icon.src = "images/fold-49.png"; // 收起图标
   }
 }
 
@@ -303,7 +279,9 @@ function loadUserPosts() {
           <h3><a href="post.jsp?postId=${post.postId}">${post.title}</a></h3>
           <p>${post.content.substring(0, 100)}...</p>
           <p><small>发布时间：${post.createdAt}</small></p>
-          <button class="delete-post-button" data-post-id="${post.postId}">删除</button>
+          <button class="delete-post-button" data-post-id="${post.postId}">
+            <img class="delete-icon" src="images/delete-40.png" alt="删除帖子" />
+          </button>
         `;
         userPostList.appendChild(postElement);
 
@@ -363,7 +341,9 @@ function loadFavoritePosts() {
           <h3><a href="post.jsp?postId=${post.postId}">${post.title}</a></h3>
           <p>${post.content.substring(0, 100)}...</p>
           <p><small>发布时间：${post.createdAt}</small></p>
-          <button class="cancel-favorite-button" data-post-id="${post.postId}">取消收藏</button>
+          <button class="cancel-favorite-button" data-post-id="${post.postId}">
+            <img class="delete-icon" src="images/delete-40.png" alt="取消收藏" />
+          </button>
         `;
         favoritePostList.appendChild(postElement);
 

@@ -49,7 +49,10 @@
         <!-- 我的帖子 -->
         <section>
             <h2>
-                <button class="toggle-button" onclick="toggleSection('userPostList')">我的帖子</button>
+                <button class="toggle-button" onclick="toggleSection('userPostList', this)">
+                    <img class="toggle-icon" src="images/fold-49.png" alt="展开/收起" />
+                    我的帖子
+                </button>
             </h2>
             <div id="userPostList" class="post-list" style="display: none;">
                 <!-- 动态加载用户帖子 -->
@@ -59,7 +62,10 @@
         <!-- 收藏帖子 -->
         <section>
             <h2>
-                <button class="toggle-button" onclick="toggleSection('favoritePostList')">收藏帖子</button>
+                <button class="toggle-button" onclick="toggleSection('favoritePostList', this)">
+                    <img class="toggle-icon" src="images/fold-49.png" alt="展开/收起" />
+                    收藏帖子
+                </button>
             </h2>
             <div id="favoritePostList" class="post-list" style="display: none;">
                 <!-- 动态加载收藏帖子 -->

@@ -22,8 +22,13 @@ public class PostServlet extends HttpServlet {
         // 设置响应的内容类型为 JSON
         response.setContentType("application/json; charset=UTF-8");
 
-        // 调用 PostDao 获取所有帖子
-        List<PostBean> posts = postDao.getAllPosts();
+        // 获取当前登录用户
+        HttpSession session = request.getSession(false);
+        UserBean currentUser = (UserBean) session.getAttribute("user");
+        int userId = (currentUser != null) ? currentUser.getUserId() : 0;
+
+        // 调用 PostDao 获取所有帖子（包含点赞数和用户点赞状态）
+        List<PostBean> posts = postDao.getAllPostsWithLikes(userId);
 
         // 为每个帖子获取发布者信息
         for (PostBean post : posts) {

@@ -8,6 +8,8 @@ public class PostBean {
     private String createdAt;    // 创建时间
     private String updatedAt;    // 更新时间
     private String author;       // 发布者用户名
+    private int likes;           // 点赞数
+    private boolean isLiked;     // 当前用户是否已点赞
 
     // Getter 和 Setter 方法
     public int getPostId() {
@@ -64,5 +66,21 @@ public class PostBean {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean isLiked) {
+        this.isLiked = isLiked;
     }
 }

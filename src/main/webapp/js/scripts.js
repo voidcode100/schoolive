@@ -184,7 +184,9 @@ function loadPosts() {
           <h3><a href="post.jsp?postId=${post.postId}">${post.title}</a></h3>
           <p>${post.content.substring(0, 100)}...</p>
           <p><small>发布者：${post.author} | 发布时间：${post.createdAt}</small></p>
-          <button class="like-button" data-post-id="${post.postId}">点赞 (${post.likes})</button>
+          <button class="like-button ${post.isLiked ? 'liked' : ''}" data-post-id="${post.postId}">
+            ${post.isLiked ? `已点赞 (${post.likes})` : `点赞 (${post.likes})`}
+          </button>
           <button class="favorite-button" data-post-id="${post.postId}">收藏</button>
         `;
         postList.appendChild(postElement);

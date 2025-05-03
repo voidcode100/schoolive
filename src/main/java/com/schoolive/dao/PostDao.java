@@ -48,6 +48,36 @@ public class PostDao {
         return posts;
     }
 
+    // 获取所有帖子（包含点赞数和用户是否已点赞）
+    public List<PostBean> getAllPostsWithLikes(int userId) {
+        String sql = "SELECT p.post_id, p.user_id, p.title, p.content, p.created_at, p.updated_at, u.username AS author, " +
+                     "(SELECT COUNT(*) FROM likes l WHERE l.post_id = p.post_id) AS likes, " +
+                     "(SELECT COUNT(*) FROM likes l WHERE l.post_id = p.post_id AND l.user_id = ?) AS isLiked " +
+                     "FROM posts p JOIN users u ON p.user_id = u.user_id ORDER BY p.created_at DESC";
+        List<PostBean> posts = new ArrayList<>();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                PostBean post = new PostBean();
+                post.setPostId(rs.getInt("post_id"));
+                post.setUserId(rs.getInt("user_id"));
+                post.setTitle(rs.getString("title"));
+                post.setContent(rs.getString("content"));
+                post.setCreatedAt(rs.getString("created_at"));
+                post.setUpdatedAt(rs.getString("updated_at"));
+                post.setAuthor(rs.getString("author"));
+                post.setLikes(rs.getInt("likes"));
+                post.setLiked(rs.getInt("isLiked") > 0);
+                posts.add(post);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return posts;
+    }
+
     // 根据帖子ID获取帖子详情
     public PostBean getPostById(int postId) {
         String sql = "SELECT p.post_id, p.user_id, p.title, p.content, p.created_at, p.updated_at, u.username AS author " +

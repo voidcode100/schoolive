@@ -61,4 +61,17 @@ public class CommentDao {
             return false;
         }
     }
+
+    // 根据帖子ID删除所有评论
+    public boolean deleteCommentsByPostId(int postId) {
+        String sql = "DELETE FROM comments WHERE post_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, postId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

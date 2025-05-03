@@ -279,6 +279,15 @@ function loadUserProfile() {
       }
     });
 }
+// 切换展开/收起功能
+function toggleSection(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (section.style.display === "none") {
+    section.style.display = "block";
+  } else {
+    section.style.display = "none";
+  }
+}
 
 // 动态加载用户个人帖子
 function loadUserPosts() {
@@ -294,8 +303,13 @@ function loadUserPosts() {
           <h3><a href="post.jsp?postId=${post.postId}">${post.title}</a></h3>
           <p>${post.content.substring(0, 100)}...</p>
           <p><small>发布时间：${post.createdAt}</small></p>
+          <button class="delete-post-button" data-post-id="${post.postId}">删除</button>
         `;
         userPostList.appendChild(postElement);
+
+        // 绑定删除帖子事件
+        const deleteButton = postElement.querySelector(".delete-post-button");
+        deleteButton.addEventListener("click", () => deletePost(deleteButton));
       });
     })
     .catch((error) => {
@@ -304,13 +318,34 @@ function loadUserPosts() {
     });
 }
 
-// 切换展开/收起功能
-function toggleSection(sectionId) {
-  const section = document.getElementById(sectionId);
-  if (section.style.display === "none") {
-    section.style.display = "block";
-  } else {
-    section.style.display = "none";
+// 删除帖子
+function deletePost(button) {
+  const postId = button.dataset.postId;
+
+  if (confirm("确定要删除这篇帖子吗？")) {
+    fetch(`/schoolive/posts?postId=${postId}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          button.parentElement.remove(); // 删除帖子元素
+          alert("帖子已删除！");
+
+          // 重新加载收藏帖子列表
+          const favoritePostList = document.getElementById("favoritePostList");
+          if (favoritePostList) {
+            favoritePostList.innerHTML = ""; // 清空当前收藏帖子列表
+            loadFavoritePosts(); // 重新加载收藏帖子
+          }
+        } else {
+          alert("删除失败，请稍后重试！");
+        }
+      })
+      .catch((error) => {
+        console.error("删除帖子失败：", error);
+        alert("网络错误，请稍后重试！");
+      });
   }
 }
 
@@ -328,13 +363,40 @@ function loadFavoritePosts() {
           <h3><a href="post.jsp?postId=${post.postId}">${post.title}</a></h3>
           <p>${post.content.substring(0, 100)}...</p>
           <p><small>发布时间：${post.createdAt}</small></p>
+          <button class="cancel-favorite-button" data-post-id="${post.postId}">取消收藏</button>
         `;
         favoritePostList.appendChild(postElement);
+
+        // 绑定取消收藏事件
+        const cancelButton = postElement.querySelector(".cancel-favorite-button");
+        cancelButton.addEventListener("click", () => cancelFavorite(cancelButton));
       });
     })
     .catch((error) => {
       console.error("加载收藏帖子失败：", error);
       alert("无法加载收藏帖子，请稍后重试！");
+    });
+}
+
+// 取消收藏
+function cancelFavorite(button) {
+  const postId = button.dataset.postId;
+
+  fetch(`/schoolive/favorite?postId=${postId}`, {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        button.parentElement.remove(); // 删除收藏帖子元素
+        alert("已取消收藏！");
+      } else {
+        alert("取消收藏失败，请稍后重试！");
+      }
+    })
+    .catch((error) => {
+      console.error("取消收藏失败：", error);
+      alert("网络错误，请稍后重试！");
     });
 }
 

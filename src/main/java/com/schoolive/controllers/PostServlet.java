@@ -1,10 +1,14 @@
 package com.schoolive.controllers;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.schoolive.beans.PostBean;
 import com.schoolive.beans.UserBean;
 import com.schoolive.dao.PostDao;
 import com.schoolive.dao.UserDao;
+import com.schoolive.dao.CommentDao;
+import com.schoolive.dao.LikeDao;
+import com.schoolive.dao.FavoriteDao;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +20,9 @@ import java.util.List;
 public class PostServlet extends HttpServlet {
     private PostDao postDao = new PostDao();
     private UserDao userDao = new UserDao();
+    private CommentDao commentDao = new CommentDao();
+    private LikeDao likeDao = new LikeDao();
+    private FavoriteDao favoriteDao = new FavoriteDao();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -46,5 +53,44 @@ public class PostServlet extends HttpServlet {
 
         // 将 JSON 数据写入响应
         response.getWriter().write(json);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 设置响应的内容类型为 JSON
+        response.setContentType("application/json; charset=UTF-8");
+
+        // 获取帖子ID
+        String postIdParam = request.getParameter("postId");
+        if (postIdParam == null || postIdParam.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"success\": false, \"message\": \"帖子ID不能为空\"}");
+            return;
+        }
+
+        int postId;
+        try {
+            postId = Integer.parseInt(postIdParam);
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"success\": false, \"message\": \"无效的帖子ID\"}");
+            return;
+        }
+
+        // 删除与帖子相关的评论、点赞、收藏记录
+        commentDao.deleteCommentsByPostId(postId); // 即使没有评论也不会影响结果
+        likeDao.removeLikesByPostId(postId);      // 即使没有点赞也不会影响结果
+        favoriteDao.removeFavoritesByPostId(postId); // 即使没有收藏也不会影响结果
+
+        // 删除帖子
+        boolean postDeleted = postDao.deletePost(postId);
+
+        // 返回结果
+        JsonObject jsonResponse = new JsonObject();
+        jsonResponse.addProperty("success", postDeleted); // 只根据帖子是否删除成功返回结果
+        if (!postDeleted) {
+            jsonResponse.addProperty("message", "帖子删除失败");
+        }
+        response.getWriter().write(jsonResponse.toString());
     }
 }

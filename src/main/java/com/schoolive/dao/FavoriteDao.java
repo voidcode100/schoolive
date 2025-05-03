@@ -76,4 +76,17 @@ public class FavoriteDao {
         }
         return favorites;
     }
+
+    // 根据帖子ID删除所有收藏
+    public boolean removeFavoritesByPostId(int postId) {
+        String sql = "DELETE FROM favorites WHERE post_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, postId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -25,7 +25,10 @@
         </nav>
     </header>
     <main>
-        <h2>帖子列表</h2>
+        <h2>校园圈子</h2>
+        <p>这里是东华理工校园圈，在这里你可以分享在校园中遇到的有趣的人，事，物。</p>
+        <p>也可以在这里发布一些校园活动的信息，或者是一些二手交易的信息。</p>
+        <p>同时你可以在每一位同学发布的帖子下进行讨论、锐评，你大可以把这个网站视为一个校园交友论坛。</p>
         <!-- 发布帖子按钮 -->
         <div class="post-actions">
             <button onclick="location.href='createPost.jsp'" class="create-post-button">发布帖子</button>

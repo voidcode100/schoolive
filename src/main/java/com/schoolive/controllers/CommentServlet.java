@@ -80,9 +80,9 @@ public class CommentServlet extends HttpServlet {
         for (CommentBean comment : comments) {
             UserBean user = userDao.getUserById(comment.getUserId());
             if (user != null) {
-                comment.setAuthor(user.getUsername()); // 设置评论的作者用户名
+                comment.setAuthor("<a href='userProfile.jsp?userId=" + user.getUserId() + "'>" + user.getUsername() + "</a>");
             } else {
-                comment.setAuthor("未知用户"); // 如果用户不存在，设置默认值
+                comment.setAuthor("未知用户");
             }
         }
 

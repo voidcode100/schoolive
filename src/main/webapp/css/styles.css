@@ -200,6 +200,25 @@ form#updateUserForm button:hover {
   color: #333;
 }
 
+/* 评论总数容器 */
+.comment-count {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* 评论图标样式 */
+.comment-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* 评论计数样式 */
+.comment-count span {
+  font-size: 14px;
+  color: #333;
+}
+
 /* 发布帖子按钮样式 */
 .create-post-button {
   padding: 10px 20px;
@@ -266,6 +285,33 @@ form#updateUserForm button:hover {
   width: 24px;
   height: 24px;
   cursor: pointer;
+}
+
+/* 返回按钮样式 */
+.back-button {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
+}
+
+/* 返回按钮图标样式 */
+.back-icon {
+  width: 32px; /* 图标宽度 */
+  height: 32px; /* 图标高度 */
+  cursor: pointer; /* 鼠标悬停时显示手型 */
+  display: inline-block;
 }
 
 /* Footer Styling */

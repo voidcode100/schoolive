@@ -24,12 +24,13 @@ public class PostDao {
         }
     }
 
-    // 获取所有帖子（包含点赞数和用户是否已点赞、已收藏）
-    public List<PostBean> getAllPostsWithLikesAndFavorites(int userId) {
+    // 获取所有帖子（包含点赞数、评论数和用户是否已点赞、已收藏）
+    public List<PostBean> getAllPosts(int userId) {
         String sql = "SELECT p.post_id, p.user_id, p.title, p.content, p.created_at, p.updated_at, u.username AS author, " +
                      "(SELECT COUNT(*) FROM likes l WHERE l.post_id = p.post_id) AS likes, " +
                      "(SELECT COUNT(*) FROM likes l WHERE l.post_id = p.post_id AND l.user_id = ?) AS isLiked, " +
-                     "(SELECT COUNT(*) FROM favorites f WHERE f.post_id = p.post_id AND f.user_id = ?) AS isFavorited " +
+                     "(SELECT COUNT(*) FROM favorites f WHERE f.post_id = p.post_id AND f.user_id = ?) AS isFavorited, " +
+                     "(SELECT COUNT(*) FROM comments c WHERE c.post_id = p.post_id) AS comments " + // 评论总数
                      "FROM posts p JOIN users u ON p.user_id = u.user_id ORDER BY p.created_at DESC";
         List<PostBean> posts = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection();
@@ -48,7 +49,8 @@ public class PostDao {
                 post.setAuthor(rs.getString("author"));
                 post.setLikes(rs.getInt("likes"));
                 post.setLiked(rs.getInt("isLiked") > 0);
-                post.setFavorited(rs.getInt("isFavorited") > 0); // 判断是否已收藏
+                post.setFavorited(rs.getInt("isFavorited") > 0);
+                post.setComments(rs.getInt("comments")); // 设置评论总数
                 posts.add(post);
             }
         } catch (SQLException e) {

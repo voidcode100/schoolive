@@ -11,6 +11,7 @@ public class PostBean {
     private int likes;           // 点赞数
     private boolean isLiked;     // 当前用户是否已点赞
     private boolean isFavorited; // 当前用户是否已收藏
+    private int comments;        // 评论总数
 
     // Getter 和 Setter 方法
     public int getPostId() {
@@ -91,5 +92,13 @@ public class PostBean {
 
     public void setFavorited(boolean isFavorited) {
         this.isFavorited = isFavorited;
+    }
+
+    public int getComments() {
+        return comments;
+    }
+
+    public void setComments(int comments) {
+        this.comments = comments;
     }
 }

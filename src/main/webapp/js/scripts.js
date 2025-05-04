@@ -154,13 +154,19 @@ function loadPosts() {
           <h3><a href="post.jsp?postId=${post.postId}">${post.title}</a></h3>
           <p>${post.content.substring(0, 100)}...</p>
           <p><small>发布者：${post.author} | 发布时间：${post.createdAt}</small></p>
-          <button class="like-button ${post.isLiked ? 'liked' : ''}" data-post-id="${post.postId}">
-            <img class="like-icon" src="images/${post.isLiked ? 'like-49.png' : 'like-48.png'}" />
-            <span class="like-count">${post.likes}</span>
-          </button>
-          <button class="favorite-button ${post.isFavorited ? 'favorited' : ''}" data-post-id="${post.postId}">
-            <img class="favorite-icon" src="images/${post.isFavorited ? 'favorite-40.png' : 'favorite-41.png'}" />
-          </button>
+          <div class="post-actions">
+            <button class="like-button ${post.isLiked ? 'liked' : ''}" data-post-id="${post.postId}">
+              <img class="like-icon" src="images/${post.isLiked ? 'like-49.png' : 'like-48.png'}" />
+              <span class="like-count">${post.likes}</span>
+            </button>
+            <button class="favorite-button ${post.isFavorited ? 'favorited' : ''}" data-post-id="${post.postId}">
+              <img class="favorite-icon" src="images/${post.isFavorited ? 'favorite-40.png' : 'favorite-41.png'}" />
+            </button>
+            <div class="comment-count">
+              <img class="comment-icon" src="images/comments-50.png" />
+              <span>${post.comments}</span>
+            </div>
+          </div>
         `;
         postList.appendChild(postElement);
 
@@ -189,7 +195,10 @@ function loadComments(postId) {
         const commentElement = document.createElement("li");
         commentElement.className = "comment";
         commentElement.innerHTML = `
-          <p>${comment.author}: ${comment.content}</p>
+          <p>
+            <a href="userProfile.jsp?userId=${comment.userId}" class="comment-author">${comment.author}</a>: 
+            ${comment.content}
+          </p>
           <p><small>评论时间：${comment.createdAt}</small></p>
         `;
         commentList.appendChild(commentElement);
@@ -224,31 +233,14 @@ function loadPostDetails(postId) {
     });
 }
 
-// 加载用户信息
-function loadUserProfile() {
-  fetch("/schoolive/profile")
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error("未登录或无法加载用户信息");
-      }
-    })
-    .then((user) => {
-      document.querySelector(".profile-info").innerHTML = `
-        <p><strong>用户名：</strong> ${user.username}</p>
-        <p><strong>邮箱：</strong> ${user.email}</p>
-        <p><strong>简介：</strong> ${user.bio}</p>
-      `;
-    })
-    .catch((error) => {
-      console.error("加载用户信息失败：", error);
-      // 在注册和登录页面不显示错误提示
-      const profileInfo = document.querySelector(".profile-info");
-      if (profileInfo) {
-        alert("无法加载用户信息，请稍后重试！");
-      }
-    });
+// 返回到帖子详细页面
+function goBackToPost() {
+  const referrer = document.referrer; // 获取来源页面
+  if (referrer && referrer.includes("post.jsp")) {
+    window.location.href = referrer; // 返回来源页面
+  } else {
+    window.location.href = "post.jsp"; // 如果没有来源页面，跳转到 post.jsp
+  }
 }
 
 // 切换展开/收起功能
@@ -265,8 +257,8 @@ function toggleSection(sectionId, button) {
   }
 }
 
-// 动态加载用户个人帖子
-function loadUserPosts() {
+// 动态加载登陆用户帖子
+function loadNowUserPosts() {
   const userPostList = document.getElementById("userPostList");
 
   fetch("/schoolive/userPosts")
@@ -327,7 +319,7 @@ function deletePost(button) {
   }
 }
 
-// 动态加载收藏帖子
+// 动态加载登陆用户收藏帖子
 function loadFavoritePosts() {
   const favoritePostList = document.getElementById("favoritePostList");
 
@@ -380,6 +372,45 @@ function cancelFavorite(button) {
     });
 }
 
+// 动态加载用户信息
+function loadUserProfile(userId) {
+  fetch(`/schoolive/userProfile?userId=${userId}`)
+    .then((response) => response.json())
+    .then((user) => {
+      document.getElementById("username").textContent = user.username;
+      document.getElementById("email").textContent = user.email;
+      document.getElementById("bio").textContent = user.bio || "暂无简介";
+    })
+    .catch((error) => {
+      console.error("加载用户信息失败：", error);
+      alert("无法加载用户信息，请稍后重试！");
+    });
+}
+
+// 动态加载用户帖子
+function loadUserPosts(userId) {
+  const userPostList = document.getElementById("userPostList");
+
+  fetch(`/schoolive/userPosts?userId=${userId}`)
+    .then((response) => response.json())
+    .then((posts) => {
+      posts.forEach((post) => {
+        const postElement = document.createElement("div");
+        postElement.className = "post";
+        postElement.innerHTML = `
+          <h3><a href="post.jsp?postId=${post.postId}">${post.title}</a></h3>
+          <p>${post.content.substring(0, 100)}...</p>
+          <p><small>发布时间：${post.createdAt}</small></p>
+        `;
+        userPostList.appendChild(postElement);
+      });
+    })
+    .catch((error) => {
+      console.error("加载用户帖子失败：", error);
+      alert("无法加载用户帖子，请稍后重试！");
+    });
+}
+
 // 页面加载时初始化
 document.addEventListener("DOMContentLoaded", () => {
   const postList = document.getElementById("postList");
@@ -394,18 +425,16 @@ document.addEventListener("DOMContentLoaded", () => {
     loadComments(postId);
   }
 
-  // 仅在包含 .profile-info 的页面加载用户信息
-  if (document.querySelector(".profile-info")) {
-    loadUserProfile();
+  // 判断是否在 profile.jsp 页面
+  if (document.body.id === "profile-page") {
+    loadNowUserPosts(); // 加载登录用户的帖子
+    loadFavoritePosts(); // 加载登录用户的收藏帖子
   }
 
-  const userPostList = document.getElementById("userPostList");
-  if (userPostList) {
-    loadUserPosts();
-  }
-
-  const favoritePostList = document.getElementById("favoritePostList");
-  if (favoritePostList) {
-    loadFavoritePosts();
+  // 判断是否在 userProfile.jsp 页面
+  if (document.body.id === "user-profile-page") {
+    const userId = document.body.dataset.userId; // 从 body 的 data-user-id 属性获取用户 ID
+    loadUserProfile(userId); // 加载指定用户信息
+    loadUserPosts(userId); // 加载指定用户的帖子
   }
 });

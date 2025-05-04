@@ -16,7 +16,7 @@
     <title>个人主页 - Schoolive</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body id="profile-page">
     <header>
         <h1>个人主页</h1>
         <nav>
